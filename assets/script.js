@@ -1,76 +1,68 @@
-var questions = [
-    {
-    qNo: 1,
-    question: "are birds real",
-    choices: [
-        { text: "yes", correct: false},
-        { text: "no", correct: true},
-        { text: "maybe", correct: false},
-        { text: "idk", correct: false},
-    ],
-    },
-    {
-    qNo: 2,
-    question: "are birds real",
-    choices: [
-        { text: "yes", correct: false},
-        { text: "no", correct: true},
-        { text: "maybe", correct: false},
-        { text: "idk", correct: false},
-    ],
-    },
-    {
-    qNo: 3,
-    question: "are birds real",
-    choices: [
-        { text: "yes", correct: false},
-        { text: "no", correct: true},
-        { text: "maybe", correct: false},
-        { text: "idk", correct: false},
-    ],
-    }
-      
-];
-
-//call html elements EX:
+//call html elements:
 var startScreen = document.querySelector("#start-screen");
 var startButton = document.querySelector("#start");
-var questionsEl = document.querySelector("#questions");
-var titleEl = document.querySelector("#question-title");
-var choicesEl = document.querySelector("choices");
+
+var questionsScreen = document.querySelector("#questions-Screen");
 var timeEl = document.querySelector("#timer");
+var questionsEl = document.querySelector("#questions");
+var choiceEl = document.querySelector("#choices");
+var resultEl = document.querySelector("#result");
+var index = 0;
+var score = 0;
+
 var endScreen = document.querySelector("#end-screen");
+var submit = document.querySelector("#submit");
 var finalScore = document.querySelector("#final-score");
 var initials = document.querySelector("#initials");
 
-var secondsLeft = 100;
+var secondsLeft = 10;
+
+var theQuestions = [
+    {
+        question: "are birds real",
+        choices: ["A: yes", "B: no", "C: maybe", "D: idk"],
+        correct: "B: no"
+    },
+    {
+        question: "beep boop",
+        choices: ["A: agfdg", "B: nadg", "C:agdg e", "D: iadg"],
+        correct: "D: iadg"
+    },
+    {
+        question: "jshigafduhga",
+        choices: ["A: yes", "B: no", "C: mdagdgdfgdbe", "D: idk"],
+        correct: "C: mdagdgdfgdbe"
+    },
 
 
-startButton.addEventListener("click", function(){
+];
+
+startButton.addEventListener("click", () => {
     startGame();
 });
 
 
-function startGame(){
+function startGame() {
     clearStartScreen();
     countdown();
     getQuestions();
 }
 
-function clearStartScreen(){
+function clearStartScreen() {
     startScreen.setAttribute("class", "hide");
+    questionsScreen.classList.remove("hide");
 }
 
 
-function countdown(){
+function countdown() {
 
-    var timerInterval = setInterval(function(){
+    var timerInterval = setInterval(function () {
         secondsLeft--;
         timeEl.textContent = secondsLeft;
 
-        if(secondsLeft === 0){
+        if (secondsLeft === -1) {
             clearInterval(timerInterval);
-            endgame();
+            endGame();
         }
 
     }, 1000);
@@ -78,87 +70,71 @@ function countdown(){
 }
 
 
-function getQuestions(qNo){
-    var index = 0;
-    questionsEl.textContent = questions.questions;
-    console.log(questions);
-    questionsEl.setAttribute("class", "show");
-    questions.choices.forEach((choices) => {
-        var choiceBtn = document.createElement("button");
-        choiceBtn.textContent = choices.text;
-        choiceBtn.classList.add("btn");
-        if (choices.correct) {
-            choiceBtn.dataset.correct = choices.correct;
-        }
-        choicesEl.appendChild(choiceBtn);
-        choiceBtn.addEventListener("click", getAnswer);
-    })
+function getQuestions() {
 
-    questionsEl = questions[index].choices;
+    theQuestions.textContent = "";
+    questionsEl.textContent = "";
 
+    var questionsVisable = document.createElement("h1");
+    questionsVisable.setAttribute("id", "show");
+    questionsEl.appendChild(questionsVisable);
+    document.getElementById("show").textContent = theQuestions[index].question;
 
-    for (var i = 0; i < questions.length; i++){
-        
+    for (var i = 0; i < theQuestions[index].choices.length; i++) {
+        var choicesVisable = document.createElement("li");
+        choicesVisable.setAttribute("id", theQuestions[index].choices[i]);
+        choiceEl.appendChild(choicesVisable);
+        choicesVisable.append(theQuestions[index].choices[i]);
+
+        choicesVisable.addEventListener("click", function (event) {
+            if (event.target.id = theQuestions[index].correct) {
+                resultEl.textContent = "correct";
+                score += 10;
+                console.log("correct");
+            }
+            else{
+                resultEl.textContent = "incorrect";
+                secondsLeft -= 10;
+                console.log("incorrect");
+            }
+            nextQuestion();
+
+        })
+
     }
-/*
-        
-        var index = 0;
-
-        get question object at index 0
-        questions[i].choices
-
-        
-
-        nextQuestion();
-
-        for loop to get choices(
-            
-            create btnEl
-            btnEl.text(choices[i])
-            appendChild
-        )
-        
-
-    }*/
-}
-/*
-
-questionClick(){
-    event.target
-
-    if choice is false(
-        time = time - 10;
-        question index++
-    )
-
-    if choice is true(
-        question index++
-    )
-
-    };
-
-   
-
-    check if we have more questions
-    yes - get question
-    no - endGame();
-
-endGame(){
-    clears quiz page
-
-    get value for user initials + score
-
-    array to set to local storage
-};
-
-renderScoreboard(){
-    clearStartScreen();
-
-    renders scores and initials from local storate (use for loop and array)
-
 }
 
-btnEl.onClick('click', questionClick)
+function nextQuestion(){
+    index ++;
+    resultEl.textContent = "";
+    choiceEl.textContent = "";
 
-*/
+    if(index < theQuestions.length){
+    getQuestions();
+    }
+    else if(index == theQuestions.length){
+    endGame();
+    }
+}
+
+    function endGame() {
+        console.log("game over");
+        questionsScreen.setAttribute("class", "hide");
+        endScreen.classList.remove("hide"); 
+        
+        submit.addEventListener("click", () => {
+            ;
+        });
+    }
+
+    function renderScoreboard() {
+        clearStartScreen();
+
+        // renders scores and initials from local storage (use for loop and array)
+
+    }
+
+//btnEl.onClick('click', questionClick)
+
+
 
