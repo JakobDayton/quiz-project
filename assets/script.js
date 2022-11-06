@@ -1,28 +1,33 @@
 var questions = [
     {
+    qNo: 1,
     question: "are birds real",
-    choices: ["yes", "no", "maybe", "bird noises"],
-    answer: "no"
+    choices: [
+        { text: "yes", correct: false},
+        { text: "no", correct: true},
+        { text: "maybe", correct: false},
+        { text: "idk", correct: false},
+    ],
     },
     {
+    qNo: 2,
     question: "are birds real",
-    choices: ["yes", "no", "maybe", "bird noises"],
-    answer: "no"
+    choices: [
+        { text: "yes", correct: false},
+        { text: "no", correct: true},
+        { text: "maybe", correct: false},
+        { text: "idk", correct: false},
+    ],
     },
     {
+    qNo: 3,
     question: "are birds real",
-    choices: ["yes", "no", "maybe", "bird noises"],
-    answer: "no"
-    },
-    {
-    question: "are birds real",
-    choices: ["yes", "no", "maybe", "bird noises"],
-    answer: "no"
-    },
-    {
-    question: "are birds real",
-    choices: ["yes", "no", "maybe", "bird noises"],
-    answer: "no"
+    choices: [
+        { text: "yes", correct: false},
+        { text: "no", correct: true},
+        { text: "maybe", correct: false},
+        { text: "idk", correct: false},
+    ],
     }
       
 ];
@@ -35,6 +40,8 @@ var titleEl = document.querySelector("#question-title");
 var choicesEl = document.querySelector("choices");
 var timeEl = document.querySelector("#timer");
 var endScreen = document.querySelector("#end-screen");
+var finalScore = document.querySelector("#final-score");
+var initials = document.querySelector("#initials");
 
 var secondsLeft = 100;
 
@@ -71,15 +78,24 @@ function countdown(){
 }
 
 
-function getQuestions(){
-
+function getQuestions(qNo){
     var index = 0;
-
-    questionsEl.remove("class", "hide");
+    questionsEl.textContent = questions.questions;
+    console.log(questions);
+    questionsEl.setAttribute("class", "show");
+    questions.choices.forEach((choices) => {
+        var choiceBtn = document.createElement("button");
+        choiceBtn.textContent = choices.text;
+        choiceBtn.classList.add("btn");
+        if (choices.correct) {
+            choiceBtn.dataset.correct = choices.correct;
+        }
+        choicesEl.appendChild(choiceBtn);
+        choiceBtn.addEventListener("click", getAnswer);
+    })
 
     questionsEl = questions[index].choices;
 
-    nextQuestion();
 
     for (var i = 0; i < questions.length; i++){
         
