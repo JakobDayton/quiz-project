@@ -14,7 +14,22 @@ body,
 
 body {
   font-family: sans-serif;
-  background-color: #f9fbfd;
+  background-color: #313336;
+  color:hsl(0, 0%, 100%);
+}
+
+
+.button {
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  color: hsl(206, 100%, 91%);
+  background-color: hsl(207, 48%, 26%);
+  border:none;
+  cursor: pointer;
 }
 
 .wrapper {
@@ -35,8 +50,8 @@ header {
   background-color: hsl(0, 0%, 100%);
   border-radius: 5px;
   border-width: 1px;
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px 0px;
-  color: hsl(206, 17%, 28%);
+  box-shadow: rgba(24, 247, 255) 0 0 6px 6px;
+  color: hsl(0, 0%, 2%);
   font-size: 18px;
   margin: 0 auto;
   max-width: 800px;
@@ -49,21 +64,9 @@ header {
 }
 
 
-.btn {
-  border: none;
-  background-color: hsl(360, 91%, 36%);
-  border-radius: 25px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 6px 0px rgba(0, 0, 0, 0.2) 0px 1px 1px
-    0px;
-  color: hsl(0, 0%, 100%);
-  display: inline-block;
-  font-size: 22px;
-  line-height: 22px;
-  margin: 16px 16px 16px 20px;
-  padding: 14px 34px;
-  text-align: center;
-  cursor: pointer;
-}
+
+
+
 
 .hide{
   display: none;

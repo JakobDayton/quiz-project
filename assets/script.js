@@ -1,4 +1,5 @@
 //call html elements:
+var highscoreBtn = document.querySelector("#highscoreBtn");
 var startScreen = document.querySelector("#start-screen");
 var startButton = document.querySelector("#start");
 
@@ -12,27 +13,42 @@ var score = 0;
 
 var endScreen = document.querySelector("#end-screen");
 var submit = document.querySelector("#submit");
-var finalScore = document.querySelector("#final-score");
-var initials = document.querySelector("#initials");
+var finalScoreEl = document.querySelector("#final-score");
+var initialsEl = document.querySelector("#initials");
 
-var secondsLeft = 10;
+var highscoreScreen = document.querySelector("#highscore-screen");
+var highscoreListEl = document.querySelector("#highscoreList");
+var highscoreScreenVis = false;
+
+var secondsLeft = 60;
+
 
 var theQuestions = [
     {
-        question: "are birds real",
-        choices: ["A: yes", "B: no", "C: maybe", "D: idk"],
-        correct: "B: no"
+        question: "What element do we use to connect an external JavaScript file to a HTML file? ",
+        choices: ["A: <div>", "B: <script>", "C: <style>", "D: <append>"],
+        correct: "B: <script>"
     },
     {
-        question: "beep boop",
-        choices: ["A: agfdg", "B: nadg", "C:agdg e", "D: iadg"],
-        correct: "D: iadg"
+        question: "Which is the concatenation operator?",
+        choices: ["A: =", "B: -", "C:==", "D: +"],
+        correct: "D: +"
     },
     {
-        question: "jshigafduhga",
-        choices: ["A: yes", "B: no", "C: mdagdgdfgdbe", "D: idk"],
-        correct: "C: mdagdgdfgdbe"
+        question: "Which variable has values of true or false",
+        choices: ["A: String", "B: Boolean", "C: TrueFalse", "D: Number"],
+        correct: "B: Boolean"
     },
+    {
+        question: "Which is the 'not' operator?",
+        choices: ["A: !", "B: ~", "C: -", "D: ?"],
+        correct: "A: !"
+    },
+    {
+        question: "A variable called within a function is a _____ variable",
+        choices: ["A: global", "B: private", "C: internal", "D: local"],
+        correct: "D: local"
+    }
 
 
 ];
@@ -50,8 +66,11 @@ function startGame() {
 
 function clearStartScreen() {
     startScreen.setAttribute("class", "hide");
-    questionsScreen.classList.remove("hide");
 }
+
+// function showStartScreen() {
+//     startScreen.classList("remove");
+// }
 
 
 function countdown() {
@@ -63,6 +82,8 @@ function countdown() {
         if (secondsLeft === -1) {
             clearInterval(timerInterval);
             endGame();
+        } else if (highscoreScreen == true) {
+            clearInterval(timerInterval);
         }
 
     }, 1000);
@@ -71,6 +92,8 @@ function countdown() {
 
 
 function getQuestions() {
+    
+    questionsScreen.classList.remove("hide");
 
     theQuestions.textContent = "";
     questionsEl.textContent = "";
@@ -87,7 +110,7 @@ function getQuestions() {
         choicesVisable.append(theQuestions[index].choices[i]);
 
         choicesVisable.addEventListener("click", function (event) {
-            if (event.target.id = theQuestions[index].correct) {
+            if (event.target.id == theQuestions[index].correct) {
                 resultEl.textContent = "correct";
                 score += 10;
                 console.log("correct");
@@ -117,24 +140,64 @@ function nextQuestion(){
     }
 }
 
+
+
+highscoreBtn.addEventListener("click", () => {
+    showHighScores();
+    clearStartScreen();
+});
+
+// function clearHighScores() {
+//     highscoreScreen.setAttribute("class", "hide");
+// }
+
+function showHighScores() {
+    var storedScore = JSON.parse(localStorage.getItem("score"));
+
+    questionsScreen.setAttribute("class", "hide");
+    endScreen.setAttribute("class", "hide");
+    highscoreScreen.classList.remove("hide");
+
+    highscoreScreen = true;
+
+    for (var i = 0; i < storedScore.length; i++) {
+
+        console.log(storedScore[i]);
+
+        // var scoreListEl = document.createElement("li");
+        // scoreListEl.setAttribute("id", "show");
+        // scoreListEl.textContent = (storedInitials + ": " + storedScore);
+
+        // highscoreListEl.appendChild(scoreList);
+    
+    }
+}
+
     function endGame() {
         console.log("game over");
         questionsScreen.setAttribute("class", "hide");
         endScreen.classList.remove("hide"); 
-        
-        submit.addEventListener("click", () => {
-            ;
+        finalScoreEl.textContent = score;
+
+        submit.addEventListener("click", function() {
+            var initials = document.querySelector("#initials").value;
+            console.log(initials);
+
+            if (initials === ""){
+                displayMessage("initials cannot be blank");
+            } else if (initials.length > 3){
+                displayMessage("you can only enter 3 initials");
+            } else {
+                var storedScore = localStorage.getItem("score") || [];
+                var highscores = {
+                    initials: initials, score: score
+                };
+
+                storedScore.push(highscores);
+                localStorage.setItem("score", JSON.stringify(storedScore));
+            }
         });
     }
 
-    function renderScoreboard() {
-        clearStartScreen();
-
-        // renders scores and initials from local storage (use for loop and array)
-
-    }
-
-//btnEl.onClick('click', questionClick)
-
-
+    
 
