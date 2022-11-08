@@ -20,9 +20,10 @@ var highscoreScreen = document.querySelector("#highscore-screen");
 var highscoreListEl = document.querySelector("#highscoreList");
 var highscoreScreenVis = false;
 
+//set timer
 var secondsLeft = 60;
 
-
+//questions array
 var theQuestions = [
     {
         question: "What element do we use to connect an external JavaScript file to a HTML file? ",
@@ -49,14 +50,12 @@ var theQuestions = [
         choices: ["A: global", "B: private", "C: internal", "D: local"],
         correct: "D: local"
     }
-
-
 ];
 
+//calls startGame on click
 startButton.addEventListener("click", () => {
     startGame();
 });
-
 
 function startGame() {
     clearStartScreen();
@@ -64,15 +63,12 @@ function startGame() {
     getQuestions();
 }
 
+//hides start screen
 function clearStartScreen() {
     startScreen.setAttribute("class", "hide");
 }
 
-// function showStartScreen() {
-//     startScreen.classList("remove");
-// }
-
-
+//starts timer
 function countdown() {
 
     var timerInterval = setInterval(function () {
@@ -90,7 +86,7 @@ function countdown() {
 
 }
 
-
+//displays questions and answer choices
 function getQuestions() {
     
     questionsScreen.classList.remove("hide");
@@ -98,17 +94,20 @@ function getQuestions() {
     theQuestions.textContent = "";
     questionsEl.textContent = "";
 
+    //displays questions
     var questionsVisable = document.createElement("h1");
     questionsVisable.setAttribute("id", "show");
     questionsEl.appendChild(questionsVisable);
     document.getElementById("show").textContent = theQuestions[index].question;
 
+    //loads answers for each question
     for (var i = 0; i < theQuestions[index].choices.length; i++) {
         var choicesVisable = document.createElement("li");
         choicesVisable.setAttribute("id", theQuestions[index].choices[i]);
         choiceEl.appendChild(choicesVisable);
         choicesVisable.append(theQuestions[index].choices[i]);
 
+        //determines if answer is correct or not
         choicesVisable.addEventListener("click", function (event) {
             if (event.target.id == theQuestions[index].correct) {
                 resultEl.textContent = "correct";
@@ -127,11 +126,13 @@ function getQuestions() {
     }
 }
 
+//cycles to next question
 function nextQuestion(){
     index ++;
     resultEl.textContent = "";
     choiceEl.textContent = "";
 
+    //determines if the user has reached the last question
     if(index < theQuestions.length){
     getQuestions();
     }
@@ -140,17 +141,13 @@ function nextQuestion(){
     }
 }
 
-
-
+//calls showHighScores and clearStartScreen on click
 highscoreBtn.addEventListener("click", () => {
     showHighScores();
     clearStartScreen();
 });
 
-// function clearHighScores() {
-//     highscoreScreen.setAttribute("class", "hide");
-// }
-
+//displays high scores
 function showHighScores() {
     var storedScore = JSON.parse(localStorage.getItem("score"));
 
@@ -160,19 +157,21 @@ function showHighScores() {
 
     highscoreScreen = true;
 
+    //creates list of scores from local storage
     for (var i = 0; i < storedScore.length; i++) {
 
         console.log(storedScore[i]);
 
-        // var scoreListEl = document.createElement("li");
-        // scoreListEl.setAttribute("id", "show");
-        // scoreListEl.textContent = (storedInitials + ": " + storedScore);
-
-        // highscoreListEl.appendChild(scoreList);
-    
+            var scoreListEl = document.createElement("li");
+            storedScore.textContent = highscores[i].initials + highscores[i].score;
+            scoreListEl.setAttribute("id", "show");
+            scoreListEl.innerHTML = storedScore;
+            highscoreListEl.appendChild(scoreListEl);
+       
     }
 }
 
+//hides questions and displays the final score as well as a text box for the user to enter their initials
     function endGame() {
         console.log("game over");
         questionsScreen.setAttribute("class", "hide");
@@ -183,6 +182,7 @@ function showHighScores() {
             var initials = document.querySelector("#initials").value;
             console.log(initials);
 
+            //saves initials and score to local storage
             if (initials === ""){
                 displayMessage("initials cannot be blank");
             } else if (initials.length > 3){
